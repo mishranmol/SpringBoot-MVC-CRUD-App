@@ -15,7 +15,7 @@ public class GlobalResponseHandler implements ResponseBodyAdvice<Object> {
 
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
-        return true; // Apply to all responses , since we have to convert each and every response body so make it true
+        return true; // Applies to all the responses . 
     }
 
     @Override
