@@ -32,7 +32,7 @@ This project is a Spring Boot MVC web application demonstrating CRUD operations 
 
 
 
-🎯 Purpose
+🎯 Purpose : 
 This project is built for learning and practice, focusing on:
 
 1-> Spring Boot fundamentals
