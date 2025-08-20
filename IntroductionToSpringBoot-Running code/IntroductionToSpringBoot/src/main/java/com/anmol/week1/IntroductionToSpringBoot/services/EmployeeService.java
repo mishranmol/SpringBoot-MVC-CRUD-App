@@ -32,10 +32,6 @@ public class EmployeeService {
 
 
     public  Optional<EmployeeDTO> getEmployeeById(Long id){
-// we are commenting below line because it might return null value and if we are using ResponseEntity so it will not show the correct status
-// code when we will try to get an employee whose id is not in DB so it will through error in console that source cannot be null in modelmapper
-
-//      EmployeeEntity employeeEntity = employeeRepository.findById(id).orElse(null);
 
         Optional<EmployeeEntity> employeeEntity = employeeRepository.findById(id);
 
@@ -44,12 +40,9 @@ public class EmployeeService {
 
 
     public List<EmployeeDTO> getAllEmployees(){
+        
         List<EmployeeEntity> employeeEntities = employeeRepository.findAll();
-        //As we have to return the EmployeeDTO list so converting each EmployeeEntity into EmployeeDTO
-        //converting the list of entity into Stream by .stream then mapping/converting each EmployeeEntity into EmployeeDTO by
-        //.map(employeeEntity -> modelMapper.map(employeeEntity,EmployeeDTO.class))
-        //at last we will collect all the conversion by.collect(Collectors.toList()); then return it
-
+        //Converting the list of entity into Stream then converting each EmployeeEntity into EmployeeDTO using "map"
         return employeeEntities
                 .stream()
                 .map(employeeEntity -> modelMapper.map(employeeEntity,EmployeeDTO.class))
@@ -61,14 +54,12 @@ public class EmployeeService {
     public EmployeeDTO CreateNewEmployee(@RequestBody EmployeeDTO inputEmployee){
 
         EmployeeEntity e = modelMapper.map(inputEmployee,EmployeeEntity.class);
-
-        //Repository only accept entity as its input parameter
         EmployeeEntity employeeEntity = employeeRepository.save(e);
         return modelMapper.map(employeeEntity,EmployeeDTO.class);
+        
     }
 
 
-    //done by own
     public boolean DeleteEmployeeById(@PathVariable Long employeeId){
         if(!employeeRepository.existsById(employeeId)) return false;
         employeeRepository.deleteById(employeeId);
@@ -76,7 +67,7 @@ public class EmployeeService {
     }
 
 
-    //done by own
+    
     public ResponseEntity<Boolean> deleteAllEmployees(){
          employeeRepository.deleteAll();
          return ResponseEntity.ok(true);
@@ -84,7 +75,6 @@ public class EmployeeService {
 
 
 
-    //it works as hashmap means if already present then put that value else do the required mapping
     public EmployeeDTO UpdateEmployeeById(EmployeeDTO employeeDTO,@PathVariable Long employeeId){
         EmployeeEntity employeeEntity = modelMapper.map(employeeDTO,EmployeeEntity.class);
         employeeEntity.setId(employeeId);
@@ -93,23 +83,28 @@ public class EmployeeService {
     }
 
 
+
+    
     public EmployeeDTO UpdatePartialEmployeeById(Map<String,Object> updates , @PathVariable Long employeeId){
 
         if(!employeeRepository.existsById(employeeId)){
             return null ;
         }
+        
        //finding the entity which needs to be updated
       EmployeeEntity employeeEntity = employeeRepository.findById(employeeId).get();
-      //traversing over the map to get the fields which need to be updated
+
+        
       updates.forEach( (field,value) -> {
-          //we only have to update the fields that are present inside the Map and not the fields that are not present inside
+          //we only have to update the fields that are present inside the Map and not the fields that are "NOT" present inside
           //the map so we have used Reflection concept. It's a concept where we can go to the object and can update the fields
           //of that object directly .
           Field fieldToBeUpdated = ReflectionUtils.findField(EmployeeEntity.class , field);
           fieldToBeUpdated.setAccessible(true);
           ReflectionUtils.setField(fieldToBeUpdated,employeeEntity,value);
       });
-      //saving the data inside the DB after updating the fields and then returning it
+        
+      //saving the data inside the DB after updating the fields
       return modelMapper.map(employeeRepository.save(employeeEntity),EmployeeDTO.class);
     }
 
