@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-//all fields are private so have to use getters here hence @Data
+
 @Data
 public class ApiResponse<T> {
 
