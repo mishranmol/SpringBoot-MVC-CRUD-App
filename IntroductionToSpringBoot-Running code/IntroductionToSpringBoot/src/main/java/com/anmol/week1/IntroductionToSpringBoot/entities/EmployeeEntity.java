@@ -10,13 +10,13 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "employees") //used to name the table inside the DB
+@Table(name = "employees") 
 //@Getter
 //@Setter
 //@AllArgsConstructor
 //@NoArgsConstructor
 
-//these entity fields will be converted into columns inside my rows of the table
+    
 public class EmployeeEntity {
 
 
@@ -43,7 +43,7 @@ public class EmployeeEntity {
     private LocalDate dataOfJoining;
 
 
-    //indicates that whether the employee is currently working or not
+    //Indicates whether the employee is currently working or not
     private boolean isActive;
 
 
@@ -113,5 +113,6 @@ public class EmployeeEntity {
     public void setActive(boolean active) {
         isActive = active;
     }
+    
 
 }
